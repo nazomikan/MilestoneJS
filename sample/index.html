@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>MilestoneJS</title>
+<script type="text/javascript" src="../src/milestone-csjs.js"></script>
+<script type="text/javascript">
+(function () {
+  var mission = countThirtyMsec(), baseCamp = [];
+  mission.on('comeAt1', function (idx) {
+    console.log(idx);
+    baseCamp.push(idx);
+  });
+
+  mission.on('comeAt2', function (idx) {
+    console.log(idx);
+    baseCamp.push(idx);
+  });
+
+  mission.complete(function (idx) {
+    baseCamp.push(idx);
+  }).complete(function (idx) {
+    console.log(idx);
+    console.log(baseCamp);
+  });
+}());
+
+
+(function () {
+  var mission1 = countTwentyMsec()
+    , mission2 = countThirtyMsec()
+    ;
+
+  milestoneJS.when({
+    a: mission1,
+    b: mission2
+  }).complete(function (res) {
+      console.log(res);
+  });
+  }());
+
+(function () {
+  var mission1 = countTwentyMsec()
+    , mission2 = countThirtyMsec()
+    , mission3 = failMission()
+    ;
+
+  milestoneJS.when({
+    a: mission1,
+    b: mission2,
+    c: mission3
+  }).fail(function (err) {
+    console.log(err);
+  });
+}());
+
+
+function countTwentyMsec() {
+  var milestone = new milestoneJS.Milestone()
+    ;
+
+  (function a(idx) {
+    var baseCamp;
+
+    if (idx === 2) {
+      milestone.complete(idx);
+      return;
+    } else {
+      baseCamp = 'comeAt' + idx;
+      milestone.comeAt(baseCamp, idx);
+    }
+
+    setTimeout(function () {
+      a(++idx);
+    }, 10);
+  }(0));
+
+  return milestone.mission;
+}
+
+function countThirtyMsec() {
+  var milestone = new milestoneJS.Milestone()
+    ;
+
+  (function a(idx) {
+    var baseCamp;
+
+    if (idx === 3) {
+      milestone.complete(idx);
+      return;
+    } else {
+      baseCamp = 'comeAt' + idx;
+      milestone.comeAt(baseCamp, idx);
+    }
+
+    setTimeout(function () {
+      a(++idx);
+    }, 10);
+  }(0));
+
+  return milestone.mission;
+}
+
+function failMission() {
+  var milestone = new milestoneJS.Milestone()
+    ;
+
+  (function a(idx) {
+    var baseCamp;
+
+    if (idx === 3) {
+      milestone.reject('oh my god...');
+      return;
+    } else {
+      baseCamp = 'comeAt' + idx;
+      milestone.comeAt(baseCamp, idx);
+    }
+
+    setTimeout(function () {
+      a(++idx);
+    }, 10);
+  }(0));
+
+  return milestone.mission;
+}
+
+</script>
+<style>
+  article, aside, dialog, figure, footer, header,
+  hgroup, menu, nav, section { display: block; }
+</style>
+</head>
+<body>
+<p>Show Console</p>
+</body>
+</html>

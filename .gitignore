@@ -1,0 +1,6 @@
+.project
+.settings/
+.tmp*
+/node_modules/
+.swp
+.swo

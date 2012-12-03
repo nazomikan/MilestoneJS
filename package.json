@@ -1,0 +1,8 @@
+{
+  "name": "MilestoneJS",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "mocha": "~1.7.4"
+  }
+}
