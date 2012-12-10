@@ -121,7 +121,7 @@ Moreover, not only the state of completion but its process can also be notified.
         ;
       
       setTimeout(function () {
-      	milestone.cameAt('herf', '50msec ago');
+      	milestone.comeAt('herf', '50msec ago');
       	setTimeout(function () {
       	  milestone.complete('done');
       	}, 50);
@@ -129,7 +129,7 @@ Moreover, not only the state of completion but its process can also be notified.
       return milestone.mission;
     }
     
-    delay().on('href', function (msg) {
+    delay().on('herf', function (msg) {
       console.log(msg); // output '50msec ago'
     }).complete(function (msg) {
       console.log(msg); // output 'done'
@@ -158,6 +158,7 @@ Of course, failure in processing is also detectable.
 `then` is used to define the processing at the time of a success and failure simultaneously.
 
 arg1: success callback
+
 arg2: fail callback
 
     function delay() {
@@ -169,7 +170,7 @@ arg2: fail callback
       	  if (Date.now % 2 === 0) {
       	    milestone.complete('done')
       	  } else {
-      	    new Error('fuckin');
+      	    throw new Error('fuckin');
       	  }
       	} catch(err) {
       	  milestone.reject(err);
