@@ -2,6 +2,32 @@ var assert = require('assert')
   , milestoneJS = require('../src/milestone.js')
   ;
 
+describe('Milestone Test', function () {
+  it('should generate an exception, when complete is called doubly', function () {
+    var milestone = new milestoneJS.Milestone()
+      ;
+
+    try {
+      milestone.complete('done');
+      milestone.complete('donedone');
+    } catch(err) {
+      assert.equal('This Missions has already been completed', err.message);
+    }
+  });
+
+  it('should generate an exception, when reject is called doubly', function () {
+    var milestone = new milestoneJS.Milestone()
+      ;
+
+    try {
+      milestone.reject('oops');
+      milestone.reject('oopsoops');
+    } catch(err) {
+      assert.equal('This Missions has already been completed', err.message);
+    }
+  });
+});
+
 describe('Mission Test', function () {
   it('can publish that came at basecamp', function (done) {
     var mission = countThirtyMsec(), baseCamp = [];
@@ -38,6 +64,58 @@ describe('Mission Test', function () {
 
     mission.fail(function (err) {
       assert.equal('oh my god...', err);
+      done();
+    });
+  });
+
+  it('performs real time, When complete handler is registered into already completed mission', function (done) {
+    var milestone = new milestoneJS.Milestone()
+      , mission = milestone.mission
+      ;
+
+    milestone.complete('done');
+    mission.complete(function (msg) {
+      assert.equal('done', msg);
+      done();
+    });
+  });
+
+  it('performs real time, When fail handler is registered into already reject mission', function (done) {
+    var milestone = new milestoneJS.Milestone()
+      , mission = milestone.mission
+      ;
+
+    milestone.reject('err');
+    mission.fail(function (msg) {
+      assert.equal('err', msg);
+      done();
+    });
+  });
+
+  it('performs real time, When then handlers is registered into already complete mission', function (done) {
+    var milestone = new milestoneJS.Milestone()
+      , mission = milestone.mission
+      ;
+
+    milestone.complete('done');
+    mission.then(function (msg) {
+      assert.equal('done', msg);
+      done();
+    }, function () {
+      // nothing to do
+    });
+  });
+
+  it('performs real time, When then handlers is registered into already reject mission', function (done) {
+    var milestone = new milestoneJS.Milestone()
+      , mission = milestone.mission
+      ;
+
+    milestone.reject('err');
+    mission.then(function () {
+      // nothing to do
+    }, function (err) {
+      assert.equal('err', err);
       done();
     });
   });

@@ -80,7 +80,11 @@
       , listener = {resolved: resolveCb, error: errorCb}
       ;
 
-    heart.waiting.push(listener);
+    if (heart.finished) {
+      notify(listener, heart);
+    } else {
+      heart.waiting.push(listener);
+    }
     return this;
 
   };
@@ -90,7 +94,11 @@
       , listener = {resolved: callback, error: null}
       ;
 
-    heart.waiting.push(listener);
+    if (heart.finished) {
+      notify(listener, heart);
+    } else {
+      heart.waiting.push(listener);
+    }
     return this;
   };
 
@@ -99,7 +107,11 @@
       , listener = {resolved: null, error: callback}
       ;
 
-    heart.waiting.push(listener);
+    if (heart.finished) {
+      notify(listener, heart);
+    } else {
+      heart.waiting.push(listener);
+    }
     return this;
   };
 
