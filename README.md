@@ -1,12 +1,12 @@
 <a name="README">[MilestoneJS](https://github.com/nazomikan/MilestoneJS)</a>
 =======
 
-**comming soon**
-
-**newer promised/A library**
+**newer promises/A library**
 
 
-This library provides Promise that inherits EventEmitter.
+This library can express asynchronous processing more nearly intuitively.
+And processing can be made to hook more flexibly by including EventEmitter further compared with general Promises/A library.
+
 
 
 **Table of contents**
