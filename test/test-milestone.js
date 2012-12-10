@@ -29,7 +29,7 @@ describe('Milestone Test', function () {
 });
 
 describe('Mission Test', function () {
-  it('can publish that came at basecamp', function (done) {
+  it('should notify that, when you arrive at a base camp.', function (done) {
     var mission = countThirtyMsec(), baseCamp = [];
     mission.on('comeAt1', function (idx) {
       assert.equal(1, idx);
@@ -68,7 +68,7 @@ describe('Mission Test', function () {
     });
   });
 
-  it('performs real time, When complete handler is registered into already completed mission', function (done) {
+  it('should performs real time, When complete handler is registered into already completed mission', function (done) {
     var milestone = new milestoneJS.Milestone()
       , mission = milestone.mission
       ;
@@ -80,7 +80,7 @@ describe('Mission Test', function () {
     });
   });
 
-  it('performs real time, When fail handler is registered into already reject mission', function (done) {
+  it('should performs real time, When fail handler is registered into already reject mission', function (done) {
     var milestone = new milestoneJS.Milestone()
       , mission = milestone.mission
       ;
@@ -92,7 +92,7 @@ describe('Mission Test', function () {
     });
   });
 
-  it('performs real time, When then handlers is registered into already complete mission', function (done) {
+  it('should performs real time, When then handlers is registered into already complete mission', function (done) {
     var milestone = new milestoneJS.Milestone()
       , mission = milestone.mission
       ;
@@ -106,7 +106,7 @@ describe('Mission Test', function () {
     });
   });
 
-  it('performs real time, When then handlers is registered into already reject mission', function (done) {
+  it('should performs real time, When then handlers is registered into already reject mission', function (done) {
     var milestone = new milestoneJS.Milestone()
       , mission = milestone.mission
       ;
@@ -149,6 +149,45 @@ describe('Grouping Test', function () {
       c: mission3
     }).fail(function (err) {
       assert.equal('oh my god...', err);
+      done();
+    });
+  });
+
+  it('should performs real time, When then handlers is registered into already complete mission', function (done) {
+    var milestone1 = new milestoneJS.Milestone
+      , milestone2 = new milestoneJS.Milestone
+      , mission1 = milestone1.mission
+      , mission2 = milestone2.mission
+      ;
+
+    milestone1.complete('done');
+    milestone2.complete('donedone');
+
+    milestoneJS.when({
+      a: mission1,
+      b: mission2,
+    }).complete(function (res) {
+      assert.equal(res.a, 'done');
+      assert.equal(res.b, 'donedone');
+      done();
+    });
+  });
+
+  it('should performs real time, When then handlers is registered into already reject mission', function (done) {
+    var milestone1 = new milestoneJS.Milestone
+      , milestone2 = new milestoneJS.Milestone
+      , mission1 = milestone1.mission
+      , mission2 = milestone2.mission
+      ;
+
+    milestone1.complete('done');
+    milestone2.reject('err');
+
+    milestoneJS.when({
+      a: mission1,
+      b: mission2,
+    }).fail(function (err) {
+      assert.equal(err, 'err');
       done();
     });
   });
