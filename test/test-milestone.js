@@ -3,28 +3,30 @@ var assert = require('assert')
   ;
 
 describe('Milestone Test', function () {
-  it('should generate an exception, when complete is called doubly', function () {
-    var milestone = new milestoneJS.Milestone()
-      ;
+  describe('complete Test', function () {
+    it('should generate an exception, when complete is called doubly', function () {
+      var milestone = new milestoneJS.Milestone()
+        ;
 
-    try {
-      milestone.complete('done');
-      milestone.complete('donedone');
-    } catch(err) {
-      assert.equal('This Missions has already been completed', err.message);
-    }
-  });
+      try {
+        milestone.complete('done');
+        milestone.complete('donedone');
+      } catch(err) {
+        assert.equal('This Missions has already been completed', err.message);
+      }
+    });
 
-  it('should generate an exception, when reject is called doubly', function () {
-    var milestone = new milestoneJS.Milestone()
-      ;
+    it('should generate an exception, when reject is called doubly', function () {
+      var milestone = new milestoneJS.Milestone()
+        ;
 
-    try {
-      milestone.reject('oops');
-      milestone.reject('oopsoops');
-    } catch(err) {
-      assert.equal('This Missions has already been completed', err.message);
-    }
+      try {
+        milestone.reject('oops');
+        milestone.reject('oopsoops');
+      } catch(err) {
+        assert.equal('This Missions has already been completed', err.message);
+      }
+    });
   });
 });
 
@@ -117,6 +119,55 @@ describe('Mission Test', function () {
     }, function (err) {
       assert.equal('err', err);
       done();
+    });
+  });
+
+  describe('finish Test', function () {
+    it('should be called, if it ends in a complete', function (done) {
+      var milestone = new milestoneJS.Milestone()
+        , mission = milestone.mission
+        ;
+
+      setTimeout(function () {
+        milestone.complete('done');
+      }, 1);
+
+      mission.finish(function (msg) {
+        assert.equal('done', msg);
+        done();
+      });
+    });
+
+    it('should be called, if it ends in a reject', function (done) {
+      var milestone = new milestoneJS.Milestone()
+        , mission = milestone.mission
+        ;
+
+      setTimeout(function () {
+        milestone.reject('oops');
+      }, 1);
+
+      mission.finish(function (msg) {
+        assert.equal('oops', msg);
+        done();
+      });
+    });
+
+    it('can be chain should be possible', function (done) {
+      var milestone = new milestoneJS.Milestone()
+        , mission = milestone.mission
+        ;
+
+      setTimeout(function () {
+        milestone.complete('done');
+      }, 1);
+
+      mission.finish(function (msg) {
+        assert.equal('done', msg);
+      }).finish(function (msg) {
+        assert.equal('done', msg);
+        done();
+      });
     });
   });
 

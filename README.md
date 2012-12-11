@@ -167,7 +167,7 @@ arg2: fail callback
       
       setTimeout(function () {
       	try {
-      	  if (Date.now % 2 === 0) {
+      	  if (+new Date % 2 === 0) {
       	    milestone.complete('done')
       	  } else {
       	    throw new Error('fuckin');
@@ -185,6 +185,25 @@ arg2: fail callback
     	console.log(msg); // output 'done'
     }, function (err) {
     	console.log(err.message); // output 'fuckin'
+    });
+
+
+You might want to use `mission.finish()` if you want to execute when processing regardless of success or failure, `mission` is finished.
+
+    var milestone = new milestoneJS.Milestone()
+      , mission = milestone.mission
+      ;
+
+    setTimeout(function () {
+        if (+new Date % 2 === 0) {
+          milestone.complete('done');
+        } else {
+          milestone.reject('oops');
+        }
+    }, 1);
+
+    mission.finish(function (msg) {
+        console.log(msg); // output 'done' or 'oops'
     });
 
 

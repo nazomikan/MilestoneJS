@@ -117,6 +117,19 @@
     return this;
   };
 
+  Mission.prototype.finish = function (callback) {
+    var heart = this.__heart
+      , listener = {resolved: callback, error: callback}
+      ;
+
+    if (heart.finished) {
+      notify(listener, heart);
+    } else {
+      heart.waiting.push(listener);
+    }
+    return this;
+  };
+
   Mission.prototype.isCompleted = function () {
     var heart = this.__heart
       ;
