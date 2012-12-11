@@ -195,15 +195,15 @@ You might want to use `mission.finish()` if you want to execute when processing 
       ;
 
     setTimeout(function () {
-        if (+new Date % 2 === 0) {
-          milestone.complete('done');
-        } else {
-          milestone.reject('oops');
-        }
+      if (+new Date % 2 === 0) {
+        milestone.complete('done');
+      } else {
+        milestone.reject('oops');
+      }
     }, 1);
 
     mission.finish(function (msg) {
-        console.log(msg); // output 'done' or 'oops'
+      console.log(msg); // output 'done' or 'oops'
     });
 
 
