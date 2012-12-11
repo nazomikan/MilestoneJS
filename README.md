@@ -1,7 +1,7 @@
 <a name="README">[MilestoneJS](https://github.com/nazomikan/MilestoneJS)</a>
 =======
 
-**newer promises/A library**
+**This is a library of asynchronous flow control, which is based on Promises/A.**
 
 
 This library can express asynchronous processing more nearly intuitively.
@@ -49,7 +49,7 @@ Then, write your module with `milestone`.
           milestone.complete(idx);
           return;
         } else {
-          baseCamp = 'comeAt' + idx;
+          baseCamp = 'baseCamp' + idx;
           milestone.comeAt(baseCamp, idx);
         }
 
@@ -62,11 +62,11 @@ Then, write your module with `milestone`.
     }
 
     mission = countTenSecond();
-    mission.on('comeAt1', function (idx) {
+    mission.on('baseCamp1', function (idx) {
       console.log('1 second passed');
     });
 
-    mission.on('comeAt2', function (idx) {
+    mission.on('baseCamp2', function (idx) {
       console.log('2 second passed');
     });
 
@@ -186,6 +186,18 @@ arg2: fail callback
     }, function (err) {
     	console.log(err.message); // output 'fuckin'
     });
+
+
+Branch of processing according to the state of `mission` is attained by using `mission.isCompleted()` and `mission.isRejected()`.
+
+    var milestone = new milestoneJS.Milestone()
+      , mission = milestone.mission
+      , assert = require('assert')
+      ;
+
+    milestone.completed('done');
+    assert.ok(mission.isCompleted()); // pass
+    assert.fail(mission.isRejected()); // pass
 
 
 **when method**

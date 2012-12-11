@@ -43,6 +43,7 @@
       isError: false
     };
 
+    emitter.setMaxListeners(0);
     this.mission = new Mission(emitter, heart);
     this.__emitter = emitter;
     this.__heart = heart;
@@ -113,6 +114,26 @@
       heart.waiting.push(listener);
     }
     return this;
+  };
+
+  Mission.prototype.isCompleted = function () {
+    var heart = this.__heart
+      ;
+
+    if (heart.finished && !heart.isError) {
+      return true;
+    }
+    return false;
+  };
+
+  Mission.prototype.isRejected = function () {
+    var heart = this.__heart
+      ;
+
+    if (heart.finished && heart.isError) {
+      return true;
+    }
+    return false;
   };
 
   milestone.Milestone = Milestone;

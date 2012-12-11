@@ -119,6 +119,64 @@ describe('Mission Test', function () {
       done();
     });
   });
+
+  describe('isCompleted Test', function () {
+    it('should show false, in the case of an uncompleted state', function () {
+      var milestone = new milestoneJS.Milestone()
+        , mission = milestone.mission
+        ;
+
+      assert.equal(false, mission.isCompleted());
+    });
+
+    it('should show true, when having ended by complete', function () {
+      var milestone = new milestoneJS.Milestone()
+        , mission = milestone.mission
+        ;
+
+      milestone.complete('done');
+      assert.equal(true, mission.isCompleted());
+    });
+
+    it('should show true, when having ended by reject', function () {
+      var milestone = new milestoneJS.Milestone()
+        , mission = milestone.mission
+        ;
+
+      milestone.reject('oops');
+      assert.equal(false, mission.isCompleted());
+    });
+  });
+
+  describe('isRejected Test', function () {
+    it('should show false, in the case of an uncompleted state', function () {
+      var milestone = new milestoneJS.Milestone()
+        , mission = milestone.mission
+        ;
+
+      assert.equal(false, mission.isRejected());
+    });
+
+    it('should show false, when having ended by complete', function () {
+      var milestone = new milestoneJS.Milestone()
+        , mission = milestone.mission
+        ;
+
+      milestone.complete('done');
+      assert.equal(false, mission.isRejected());
+    });
+
+    it('should show true, when having ended by reject', function () {
+      var milestone = new milestoneJS.Milestone()
+        , mission = milestone.mission
+        ;
+
+      milestone.reject('oops');
+      assert.equal(true, mission.isRejected());
+    });
+  });
+  describe('isCompleted Test', function () {
+  });
 });
 
 describe('Grouping Test', function () {
