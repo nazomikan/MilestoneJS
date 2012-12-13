@@ -132,7 +132,9 @@
   Mission.prototype.createBaseCamp = function (baseCampName) {
     var milestone = new Milestone();
     this.on(baseCampName, function () {
-      milestone.complete.apply(milestone, Array.prototype.slice.call(arguments));
+      if (!milestone.__heart.finished) {
+        milestone.complete.apply(milestone, Array.prototype.slice.call(arguments));
+      }
     });
 
     this.fail(function (err) {
