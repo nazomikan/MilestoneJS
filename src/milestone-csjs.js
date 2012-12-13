@@ -172,7 +172,9 @@
           };
         }(missionName), function (name) {
           return function (err) {
-            milestone.reject(err);
+            if (!milestone.__heart.finished) {
+              milestone.reject(err);
+            }
           }
         }(missionName));
         len++;

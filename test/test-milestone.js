@@ -300,6 +300,35 @@ describe('Grouping Test', function () {
       done();
     });
   });
+
+  it('should be call fail handler, When more than one of them to reject of Missions', function (done) {
+    var mission1 = failMission()
+      , mission2 = failMission()
+      ;
+
+    milestoneJS.when({
+      a: mission1,
+      b: mission2
+    }).fail(function (err) {
+      assert.equal('oh my god...', err);
+      done();
+    });
+  });
+
+  it('should be call complete handler, When more than one of them to complete of Missions', function (done) {
+    var mission1 = countTwentyMsec()
+      , mission2 = countTwentyMsec()
+      ;
+
+    milestoneJS.when({
+      a: mission1,
+      b: mission2
+    }).complete(function (res) {
+      assert.equal(2, res.a);
+      assert.equal(2, res.a);
+      done();
+    });
+  });
 });
 
 function countTwentyMsec() {
