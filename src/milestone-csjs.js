@@ -136,7 +136,9 @@
     });
 
     this.fail(function (err) {
-      milestone.reject(err);
+      if (!milestone.__heart.finished) {
+        milestone.reject(err);
+      }
     });
     return milestone.mission;
   };
