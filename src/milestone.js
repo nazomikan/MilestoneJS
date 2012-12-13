@@ -130,6 +130,18 @@
     return this;
   };
 
+  Mission.prototype.createBaseCamp = function (baseCampName) {
+    var milestone = new Milestone();
+    this.on(baseCampName, function () {
+      milestone.complete(Array.prototype.slice.call(arguments));
+    });
+
+    this.fail(function (err) {
+      milestone.reject(err);
+    });
+    return milestone.mission;
+  };
+
   Mission.prototype.isCompleted = function () {
     var heart = this.__heart
       ;

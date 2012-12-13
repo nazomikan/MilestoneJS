@@ -44,7 +44,7 @@ Then, write your module with `milestone`.
 
       (function a(idx) {
         var baseCamp;
-        
+
         if (idx === 10) {
           milestone.complete(idx);
           return;
@@ -90,36 +90,36 @@ Here is the whole API
 
 **Milestone Object / Mission Object**
 
-Instance of Milestone can be obtained as follows. 
+Instance of Milestone can be obtained as follows.
 
     var milestoneJS = require('MilestoneJS')
       , milestone = new milestoneJS.Milestone()
       ;
 
-By using milestoneJS, function returns `mission object`, without waiting for the delayed processing. 
-Moreover, bind of the processing can be carried out by registering callback into `mission object` at the time of completion of delay processing. 
+By using milestoneJS, function returns `mission object`, without waiting for the delayed processing.
+Moreover, bind of the processing can be carried out by registering callback into `mission object` at the time of completion of delay processing.
 
     function delay() {
       var milestone = new milestoneJS.Milestone()
         ;
-      
+
       setTimeout(function () {
       	milestone.complete('done');
       }, 100);
-       
+
       return milestone.mission;
     }
-    
+
     delay().complete(function (msg) {
       console.log(msg); // output 'done'
     });
 
-Moreover, not only the state of completion but its process can also be notified. 
+Moreover, not only the state of completion but its process can also be notified.
 
     function delay() {
       var milestone = new milestoneJS.Milestone()
         ;
-      
+
       setTimeout(function () {
       	milestone.comeAt('herf', '50msec ago');
       	setTimeout(function () {
@@ -128,19 +128,19 @@ Moreover, not only the state of completion but its process can also be notified.
       }, 50);
       return milestone.mission;
     }
-    
+
     delay().on('herf', function (msg) {
       console.log(msg); // output '50msec ago'
     }).complete(function (msg) {
       console.log(msg); // output 'done'
     });
 
-Of course, failure in processing is also detectable. 
+Of course, failure in processing is also detectable.
 
     function delay() {
       var milestone = new milestoneJS.Milestone()
         ;
-      
+
       setTimeout(function () {
       	try {
       	  new Error('fuckin');
@@ -150,7 +150,7 @@ Of course, failure in processing is also detectable.
       }, 50);
       return milestone.mission;
     }
-    
+
     delay().fail(function (err) {
       console.log(err.message); // output 'fuckin'
     });
@@ -164,7 +164,7 @@ arg2: fail callback
     function delay() {
       var milestone = new milestoneJS.Milestone()
         ;
-      
+
       setTimeout(function () {
       	try {
       	  if (+new Date % 2 === 0) {
@@ -178,9 +178,9 @@ arg2: fail callback
       }, 50);
       return milestone.mission;
     }
-    
-    // arg1 callback will be performed if it succeeds. 
-    // However, arg2 callback will be performed if it has failed. 
+
+    // arg1 callback will be performed if it succeeds.
+    // However, arg2 callback will be performed if it has failed.
     delay().then(function (msg) {
     	console.log(msg); // output 'done'
     }, function (err) {
@@ -221,24 +221,24 @@ Branch of processing according to the state of `mission` is attained by using `m
 
 **when method**
 
-`when` will be used if processing is related with the end status of two or more `mission`. 
+`when` will be used if processing is related with the end status of two or more `mission`.
 
-By using `when`, two or more `mission` can be treated just like one `mission`. 
+By using `when`, two or more `mission` can be treated just like one `mission`.
 
     function delay() {
       var milestone = new milestoneJS.Milestone()
         ;
-      
+
       setTimeout(function () {
       	mission.complete('done');
       }, 50);
-    
+
       return milestone.mission;
     }
-    
+
     var mission1 = delay();
     var mission2 = delay();
-    
+
     milestoneJS.when({
       a: mission1,
       b: mission2
@@ -247,4 +247,32 @@ By using `when`, two or more `mission` can be treated just like one `mission`.
       console.log(res.b); // output 'done'
     }).fail(function (err) {
       console.log(err);
+    });
+
+
+In addition, you can use an `Mission.createBaseCamp()` also offers state management of multiple `Mission` as well as the state management of multiple `milestone`.
+`Mission.createBaseCamp()` returns a new `Mission` that is completed at the timing of the `Mission.comeAt('...')`.
+
+    function delay() {
+      var milestone = new milestoneJS.Milestone()
+        ;
+
+      setTimeout(function (timer) {
+      	milestone.comeAt('herf', 'Half the time has elapsed.');
+      	setTimeout(function () {
+      	  milestone.complete('done');
+      	}, timer / 2);
+      }, timer / 2);
+      return milestone.mission;
+    }
+
+    var mission1 = delay(200);
+    var mission2 = delay(300);
+
+    milestoneJS.when({
+      a: mission1.createBaseCamp('herf'),
+      b: mission2
+    }).complete(function (res) {
+      console.log(res.a); // output 'Half the time has elapsed.'
+      console.log(res.b); // output 'done'
     });

@@ -329,6 +329,64 @@ describe('Grouping Test', function () {
       done();
     });
   });
+
+  it('should call complete handler, When more than one of them to basecamp of Missions', function (done) {
+    var mission1 = countTwentyMsec()
+      , mission2 = countTwentyMsec()
+      ;
+
+    milestoneJS.when({
+      a: mission1.createBaseCamp('comeAt1'),
+      b: mission2
+    }).complete(function (res) {
+      assert.equal(1, res.a);
+      assert.equal(2, res.b);
+      done();
+    });
+  });
+
+  it('should call complete handler, When come at more than one basecamp', function (done) {
+    var mission1 = countTwentyMsec()
+      , mission2 = countThirtyMsec()
+      ;
+
+    milestoneJS.when({
+      a: mission1.createBaseCamp('comeAt1'),
+      b: mission2.createBaseCamp('comeAt2')
+    }).complete(function (res) {
+      assert.equal(1, res.a);
+      assert.equal(2, res.b);
+      done();
+    });
+  });
+
+  it('should call fail handler, Including a plurality of Mission in BaseCamp when there is even one reject', function (done) {
+    var mission1 = countTwentyMsec()
+      , mission2 = failMission()
+      ;
+
+    milestoneJS.when({
+      a: mission1.createBaseCamp('comeAt1'),
+      b: mission2
+    }).fail(function (err) {
+      assert.equal('oh my god...', err);
+      done();
+    });
+  });
+
+  it('should call fail, Among a plurality of BaseCamp or Mission, if there is a reject until there between', function (done) {
+    var mission1 = countTwentyMsec()
+      , mission2 = failMission()
+      ;
+
+    milestoneJS.when({
+      a: mission1,
+      b: mission2.createBaseCamp('comeAt4')
+    }).fail(function (err) {
+      assert.equal('oh my god...', err);
+      done();
+    });
+  });
 });
 
 function countTwentyMsec() {
