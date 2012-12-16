@@ -1,3 +1,13 @@
+/*!
+ * MilestoneJS
+ * https://github.com/nazomikan/MilestoneJS
+ *
+ * Includes EventEmitter.js
+ * https://github.com/joyent/node/blob/master/lib/events.js
+ *
+ * Copyright 2012 nazomikan
+ * Released under the MIT license
+ */
 (function (exports) {
 
   var milestone = {}
