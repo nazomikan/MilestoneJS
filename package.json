@@ -12,12 +12,11 @@
   "bugs": {
     "web": "https://github.com/nazomikan/MilestoneJS/issues"
   },
-  "dependencies": {
-    "mocha": "~1.7.4"
-  },
-  "licenses": [{
-    "type": "MIT",
-    "https://github.com/nazomikan/MilestoneJS/blob/master/MIT-LICENSE.txt",
-  }],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/nazomikan/MilestoneJS/blob/master/MIT-LICENSE.txt"
+    }
+  ],
   "main": "./src/milestone.js"
 }
