@@ -18,9 +18,9 @@ And processing can be made to hook more flexibly by including EventEmitter furth
 
 **in Node.js**
 
-install MilestoneJS with github `git clone git@github.com:nazomikan/MilestoneJS.git`, then require it as below.
+install MilestoneJS with github `npm install milestonejs`, then require it as below.
 
-    var Milestone = require('/path/to/MilestoneJS').Milestone;
+    var Milestone = require('milestonejs').Milestone;
       , milestone = new Milestone()
       ;
 
