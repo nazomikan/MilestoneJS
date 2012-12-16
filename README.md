@@ -32,7 +32,7 @@ load MilestoneJS as a script `<script type="text/javascript" src="/path/to/miles
 
 Then, write your module with `milestone`.
 
-    var milestoneJS = require('MilestoneJS')
+    var milestoneJS = require('milestonejs')
       , Milestone = milestoneJS.Milestone
       , mission
       , mission2
@@ -92,7 +92,7 @@ Here is the whole API
 
 Instance of Milestone can be obtained as follows.
 
-    var milestoneJS = require('MilestoneJS')
+    var milestoneJS = require('milestonejs')
       , milestone = new milestoneJS.Milestone()
       ;
 
