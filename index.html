@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Milestonejs : newer promised/A library" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Milestonejs</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/nazomikan/MilestoneJS">View on GitHub</a>
+
+          <h1 id="project_title">Milestonejs</h1>
+          <h2 id="project_tagline">newer promised/A library</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/nazomikan/MilestoneJS/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/nazomikan/MilestoneJS/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="README"></a><a href="https://github.com/nazomikan/MilestoneJS">MilestoneJS</a>
+</h1>
+
+<p><strong>This is a library of asynchronous flow control, which is based on Promises/A.</strong></p>
+
+<p>This library can express asynchronous processing more nearly intuitively.
+And processing can be made to hook more flexibly by including EventEmitter further compared with general Promises/A library.</p>
+
+<p><strong>Table of contents</strong></p>
+
+<ul>
+<li><a href="#Usage">Usage</a></li>
+<li><a href="#TheAPI">The API</a></li>
+</ul><h2><a name="Usage">Usage</a></h2>
+
+<p><strong>in Node.js</strong></p>
+
+<p>install MilestoneJS with github <code>npm install milestonejs</code>, then require it as below.</p>
+
+<pre><code>var Milestone = require('milestonejs').Milestone;
+  , milestone = new Milestone()
+  ;
+</code></pre>
+
+<p><strong>in HTML</strong></p>
+
+<p>load MilestoneJS as a script <code>&lt;script type="text/javascript" src="/path/to/milestone-csjs.js"&gt;&lt;/script&gt;</code>, then require it as below.</p>
+
+<pre><code>var milestone = new milestoneJS.Milestone();
+</code></pre>
+
+<p>Then, write your module with <code>milestone</code>.</p>
+
+<pre><code>var milestoneJS = require('milestonejs')
+  , Milestone = milestoneJS.Milestone
+  , mission
+  , mission2
+  ;
+
+function countTenSecond() {
+  var milestone = new Milestone()
+    ;
+
+  (function a(idx) {
+    var baseCamp;
+
+    if (idx === 10) {
+      milestone.complete(idx);
+      return;
+    } else {
+      baseCamp = 'baseCamp' + idx;
+      milestone.comeAt(baseCamp, idx);
+    }
+
+    setTimeout(function () {
+      a(++idx);
+    }, 1000);
+  }(0));
+
+  return milestone.mission;
+}
+
+mission = countTenSecond();
+mission.on('baseCamp1', function (idx) {
+  console.log('1 second passed');
+});
+
+mission.on('baseCamp2', function (idx) {
+  console.log('2 second passed');
+});
+
+mission.complete(function (time) {
+  console.log('10 second passed');
+});
+
+mission2 = countTenSecond();
+
+milestoneJS.when({
+  a: mission,
+  b: mission2
+}).complete(function (res) {
+  console.log(res.a);
+  console.log(res.b);
+});
+</code></pre>
+
+<h2><a name="TheAPI">The API</a></h2>
+
+<p>Here is the whole API</p>
+
+<p><strong>Milestone Object / Mission Object</strong></p>
+
+<p>Instance of Milestone can be obtained as follows.</p>
+
+<pre><code>var milestoneJS = require('milestonejs')
+  , milestone = new milestoneJS.Milestone()
+  ;
+</code></pre>
+
+<p>By using milestoneJS, function returns <code>mission object</code>, without waiting for the delayed processing.
+Moreover, bind of the processing can be carried out by registering callback into <code>mission object</code> at the time of completion of delay processing.</p>
+
+<pre><code>function delay() {
+  var milestone = new milestoneJS.Milestone()
+    ;
+
+  setTimeout(function () {
+    milestone.complete('done');
+  }, 100);
+
+  return milestone.mission;
+}
+
+delay().complete(function (msg) {
+  console.log(msg); // output 'done'
+});
+</code></pre>
+
+<p>Moreover, not only the state of completion but its process can also be notified.</p>
+
+<pre><code>function delay() {
+  var milestone = new milestoneJS.Milestone()
+    ;
+
+  setTimeout(function () {
+    milestone.comeAt('herf', '50msec ago');
+    setTimeout(function () {
+      milestone.complete('done');
+    }, 50);
+  }, 50);
+  return milestone.mission;
+}
+
+delay().on('herf', function (msg) {
+  console.log(msg); // output '50msec ago'
+}).complete(function (msg) {
+  console.log(msg); // output 'done'
+});
+</code></pre>
+
+<p>Of course, failure in processing is also detectable.</p>
+
+<pre><code>function delay() {
+  var milestone = new milestoneJS.Milestone()
+    ;
+
+  setTimeout(function () {
+    try {
+      new Error('fuckin');
+    } catch(err) {
+      milestone.reject(err);
+    }
+  }, 50);
+  return milestone.mission;
+}
+
+delay().fail(function (err) {
+  console.log(err.message); // output 'fuckin'
+});
+</code></pre>
+
+<p><code>then</code> is used to define the processing at the time of a success and failure simultaneously.</p>
+
+<p>arg1: success callback</p>
+
+<p>arg2: fail callback</p>
+
+<pre><code>function delay() {
+  var milestone = new milestoneJS.Milestone()
+    ;
+
+  setTimeout(function () {
+    try {
+      if (+new Date % 2 === 0) {
+        milestone.complete('done')
+      } else {
+        throw new Error('fuckin');
+      }
+    } catch(err) {
+      milestone.reject(err);
+    }
+  }, 50);
+  return milestone.mission;
+}
+
+// arg1 callback will be performed if it succeeds.
+// However, arg2 callback will be performed if it has failed.
+delay().then(function (msg) {
+    console.log(msg); // output 'done'
+}, function (err) {
+    console.log(err.message); // output 'fuckin'
+});
+</code></pre>
+
+<p>You might want to use <code>mission.finish()</code> if you want to execute when processing regardless of success or failure, <code>mission</code> is finished.</p>
+
+<pre><code>var milestone = new milestoneJS.Milestone()
+  , mission = milestone.mission
+  ;
+
+setTimeout(function () {
+  if (+new Date % 2 === 0) {
+    milestone.complete('done');
+  } else {
+    milestone.reject('oops');
+  }
+}, 1);
+
+mission.finish(function (msg) {
+  console.log(msg); // output 'done' or 'oops'
+});
+</code></pre>
+
+<p>Branch of processing according to the state of <code>mission</code> is attained by using <code>mission.isCompleted()</code> and <code>mission.isRejected()</code>.</p>
+
+<pre><code>var milestone = new milestoneJS.Milestone()
+  , mission = milestone.mission
+  , assert = require('assert')
+  ;
+
+milestone.completed('done');
+assert.ok(mission.isCompleted()); // pass
+assert.fail(mission.isRejected()); // pass
+</code></pre>
+
+<p><strong>when method</strong></p>
+
+<p><code>when</code> will be used if processing is related with the end status of two or more <code>mission</code>.</p>
+
+<p>By using <code>when</code>, two or more <code>mission</code> can be treated just like one <code>mission</code>.</p>
+
+<pre><code>function delay() {
+  var milestone = new milestoneJS.Milestone()
+    ;
+
+  setTimeout(function () {
+    mission.complete('done');
+  }, 50);
+
+  return milestone.mission;
+}
+
+var mission1 = delay();
+var mission2 = delay();
+
+milestoneJS.when({
+  a: mission1,
+  b: mission2
+}).complete(function (res) {
+  console.log(res.a); // output 'done'
+  console.log(res.b); // output 'done'
+}).fail(function (err) {
+  console.log(err);
+});
+</code></pre>
+
+<p>In addition, you can use an <code>Mission.createBaseCamp()</code> also offers state management of multiple <code>Mission</code> as well as the state management of multiple <code>milestone</code>.
+<code>Mission.createBaseCamp()</code> returns a new <code>Mission</code> that is completed at the timing of the <code>Mission.comeAt('...')</code>.</p>
+
+<pre><code>function delay() {
+  var milestone = new milestoneJS.Milestone()
+    ;
+
+  setTimeout(function (timer) {
+    milestone.comeAt('herf', 'Half the time has elapsed.');
+    setTimeout(function () {
+      milestone.complete('done');
+    }, timer / 2);
+  }, timer / 2);
+  return milestone.mission;
+}
+
+var mission1 = delay(200);
+var mission2 = delay(300);
+
+milestoneJS.when({
+  a: mission1.createBaseCamp('herf'),
+  b: mission2
+}).complete(function (res) {
+  console.log(res.a); // output 'Half the time has elapsed.'
+  console.log(res.b); // output 'done'
+});
+</code></pre>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Milestonejs maintained by <a href="https://github.com/nazomikan">nazomikan</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
