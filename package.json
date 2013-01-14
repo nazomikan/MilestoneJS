@@ -19,6 +19,9 @@
       "url": "https://github.com/nazomikan/MilestoneJS/blob/master/MIT-LICENSE.txt"
     }
   ],
+  "devDependencies": {
+    "mocha": "1.7.4"
+  },
   "scripts": {
     "test": "mocha test/test-milestone.js"
   },
