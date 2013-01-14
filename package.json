@@ -1,8 +1,9 @@
 {
   "name": "milestonejs",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "This is a library of asynchronous flow control, which is based on Promises/A.",
   "tags": ["node", "promises/A"],
+  "keywords": ["node", "promises/A", "promise", "browser", "client"],
   "author": "nazomikan <nazomikan@gmail.com>",
   "repository": {
     "type": "git",
@@ -18,5 +19,8 @@
       "url": "https://github.com/nazomikan/MilestoneJS/blob/master/MIT-LICENSE.txt"
     }
   ],
+  "scripts": {
+    "test": "mocha test/test-milestone.js"
+  },
   "main": "./src/milestone.js"
 }
