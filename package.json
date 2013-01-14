@@ -1,6 +1,6 @@
 {
   "name": "milestonejs",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "This is a library of asynchronous flow control, which is based on Promises/A.",
   "tags": ["node", "promises/A"],
   "keywords": ["node", "promises/A", "promise", "browser", "client"],

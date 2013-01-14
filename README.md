@@ -1,8 +1,7 @@
 <a name="README">[MilestoneJS](https://github.com/nazomikan/MilestoneJS)</a>
 =======
 
-[![build status](https://secure.travis-ci.org/nazomikan/PubsubJS.png)](http://travis-ci.org/nazomikan/PubsubJS)
-
+[![build status](https://secure.travis-ci.org/nazomikan/MilestoneJS.png)](https://travis-ci.org/nazomikan/MilestoneJS)
 
 **This is a library of asynchronous flow control, which is based on Promises/A.**
 
